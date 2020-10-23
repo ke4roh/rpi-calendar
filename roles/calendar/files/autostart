@@ -1,0 +1,5 @@
+@sh /home/pi/startup.sh
+@xset s 0 0
+@xset s noblank
+@xset s noexpose
+@xset dpms 0 0 0

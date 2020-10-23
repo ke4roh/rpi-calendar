@@ -1,0 +1,6 @@
+---
+- name: Calendar setup
+  hosts: calendar
+  become: yes
+  roles:
+    - calendar

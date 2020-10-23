@@ -1,0 +1,107 @@
+- name: Install Chromium
+  package: 
+      name: chromium-browser
+      state: latest
+
+- name: Install scrot
+  package:
+      name: scrot
+      state: latest
+ 
+- name: Install feh
+  package:
+      name: feh
+      state: latest
+
+- name: Install wmctrl
+  package:
+      name: wmctrl
+      state: latest
+
+- name: Install unclutter to get the mouse pointer to disappear
+  package:
+      name: unclutter
+      state: latest
+
+- name: Install python-uinput to fake keystrokes in the browser
+  pip: 
+     executable: /usr/bin/pip3
+     name: python-uinput
+
+- name: Load the uinput module so we can fake keystrokes
+  lineinfile:
+     path: /etc/modules
+     create: true
+     line: "uinput"
+
+- name: Install calendar start script
+  copy:
+     src: startup.sh
+     dest: /home/pi/startup.sh
+     mode: '0755'
+     owner: pi
+
+- name: Install calendar restart script
+  copy:
+     src: restart.sh
+     dest: /home/pi/restart.sh
+     mode: '0755'
+     owner: pi
+
+- name: Install refresh_cal script
+  copy:
+     src: refresh_cal
+     dest: /home/pi/refresh_cal
+     mode: '0755'
+     owner: pi
+
+- name: Install reload_cal script
+  copy:
+     src: reload_cal
+     dest: /home/pi/reload_cal
+  when: false
+
+- name: Job to restart calendar hourly
+  cron: 
+    user: pi
+    name: "Restart calendar"
+    minute: "0"
+    job: "/home/pi/restart.sh 2>&1 >/dev/null"
+
+# This last one turns out not to be necesary because Google Calendar updates automatically
+- name: Job to refresh calendar by the minute
+  cron:
+    name: "Refresh calendar"
+    job: "/home/pi/refresh_cal"
+  when: false
+
+- name: Autostart folder 
+  file:
+    path: "/home/pi/.config/autostart"
+    state: directory
+    owner: pi
+    mode: '0755' 
+
+- name: Autostart the calendar on boot
+  copy:
+     src: calendar.desktop
+     dest: /home/pi/.config/autostart/calendar.desktop
+     mode: '0644'
+     owner: pi
+
+- name: Remove default screensaver config
+  lineinfile:
+     path: /etc/xdg/lxsession/LXDE-pi/autostart
+     state: absent
+     line: "@xscreensaver -no-splash"
+
+- name: Turn off screensaver in LXDE autostart
+  blockinfile:
+     path: /etc/xdg/lxsession/LXDE-pi/autostart
+     create: true
+     owner: pi
+     block: |
+        @xset s noblank
+        @xset s off
+        @xset s -dpms
+# for Pi 4, the last line should be "@xset dpms 0 0 0", but I haven't figured out how to detect the Pi 4 yet.

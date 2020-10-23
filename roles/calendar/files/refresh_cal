@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+import uinput
+with uinput.Device([ uinput.KEY_R, uinput.KEY_T ]) as device:
+   for key in (uinput.KEY_ESC, uinput.KEY_ENTER, uinput.KEY_R, uinput.KEY_T):
+      device.emit_click(key)
+   

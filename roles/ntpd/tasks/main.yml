@@ -1,0 +1,13 @@
+---
+- name: Install ntp
+  package:
+    name: ntp
+    state: present
+- name: NTP config file
+  copy:
+    src: ntp.conf
+    dest: /etc/ntp.conf
+    owner: root
+    group: root
+    mode: '0644'
+
