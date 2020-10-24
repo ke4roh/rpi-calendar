@@ -11,8 +11,14 @@ sleep 1
 FEH_WINDOW=$(wmctrl -l | grep feh | cut -f1 -d\ )
 
 # Close the calendar window
-wmctrl -ic $(wmctrl -l | grep -i "Google Calendar" | cut -f1 -d\ )
-killall chromium-browser
+OLD_CAL_WINDOW=$(wmctrl -l | grep -i "Google Calendar" | cut -f1 -d\ )
+if [ ! -z "$OLD_CAL_WINDOW" ] ; then
+   wmctrl -ic "$OLD_CAL_WINDOW"
+fi
+sleep 1
+killall chromium-browser-v7
+sleep 2
+killall -9 chromium-browser-v7 2>&1 >/dev/null || :
 
 # Restart the calendar window
 ./startup.sh
