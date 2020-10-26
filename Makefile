@@ -7,16 +7,16 @@ makeself-$(MAKESELF_VER)/makeself.sh:
 	rm makeself-$(MAKESELF_VER).run
 
 calendar-install-$(CALENDAR_VER).run: makeself-$(MAKESELF_VER)/makeself.sh install.sh hosts-localhost playbook.yml $(wildcard roles/**/*)
-	mkdir -p package
-	cp -r hosts-localhost install.sh roles playbook.yml package/.
+	mkdir -p rpi-calendar
+	cp -r hosts-localhost install.sh roles playbook.yml rpi-calendar/.
 	# makeself.sh [args] archive_dir file_name label startup_script [script_args]
-	makeself-$(MAKESELF_VER)/makeself.sh package calendar-install-$(CALENDAR_VER).run "Installing setup scripts" install.sh
+	makeself-$(MAKESELF_VER)/makeself.sh --notemp rpi-calendar calendar-install-$(CALENDAR_VER).run "Installing setup scripts" ./install.sh
 
 
 .PHONY: clean package release
 
 clean:
-	rm -rf package calendar-install-*.run
+	rm -rf rpi-calendar calendar-install-*.run
 
 package: calendar-install-$(CALENDAR_VER).run
 

@@ -30,7 +30,7 @@
 
 - name: Load the uinput module so we can fake keystrokes
   lineinfile:
-     path: /etc/modules
+     dest: /etc/modules
      create: true
      line: "uinput"
 
@@ -91,13 +91,13 @@
 
 - name: Remove default screensaver config
   lineinfile:
-     path: /etc/xdg/lxsession/LXDE-pi/autostart
+     dest: /etc/xdg/lxsession/LXDE-pi/autostart
      state: absent
      line: "@xscreensaver -no-splash"
 
 - name: Turn off screensaver in LXDE autostart
   blockinfile:
-     path: /etc/xdg/lxsession/LXDE-pi/autostart
+     dest: /etc/xdg/lxsession/LXDE-pi/autostart
      create: true
      owner: pi
      block: |
