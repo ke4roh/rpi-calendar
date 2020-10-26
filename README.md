@@ -29,21 +29,21 @@ Buster has an unfortunate networking bug that causes it to drop wi-fi connection
 Put the SD card in the Pi, connect the power supply to the Pi, but don't plug it in yet. 
 At this point, you should be able to see where the Pi will fit against the back of the TV.  Use the double-sided tape to fix the
 USB hub to a back corner of the TV. Secure the cables with duct tape and cable ties. Let the Pi float, but keep it still relative
-to the TV. [It might look something like this](photos/Back.jpg).  Take a look at [all the photos](photos).
-5. Power it up, plug in the keyboard and mouse to the TV.
+to the TV. [It might look something like this](photos/Back.jpg).  Take a look at [all the photos](photos).  The most fragile
+part of this arrangement is the micro USB power connector.  Be sure the pins on the Pi aren't touching metal.
+5. Power it up, plug in the keyboard and mouse to the usb hub.
 6. Do the basic setup for your Pi - select language, keyboard style, time zone, password, etc., and set up the network.  You'll
-use the default user "pi" to run the calendar, and this user has sudo permission.
-7. If you want to set the system up remotely (on a machine running Ansible), skip to step 12
-8. apt get install ansible
-9. download this repo to the pi
-10. cp hosts-localhost hosts
-11. skip to step 18
-12. In Pi system preferences, enable SSH.
-13. From the configuring machine, download or clone this repo
-14. SSH into the Pi
-15. ssh-copy-id to the pi (to make it oh so much easier to administer)
-16. copy hosts-localhost to a new file "hosts", and edit it, replacing "localhost" with the name or IP of your Pi.
-17. ansible-playbook playbook.yml -i hosts -u pi
-18. reboot the pi
-19. Log in to your Google account on the Pi
-20. Put a bow on it. You're done!
+use the default user "pi" to run the calendar, and this user has sudo permission by default, which will be needed.
+7. If you want to set the system up remotely (from another machine running Ansible), skip to step 11
+8. `wget https://github.com/ke4roh/rpi-calendar/releases/download/r1/calendar-install-1.run`
+9. `sh calendar-install-1.run`
+10. skip to step 17
+11. In Pi system preferences, enable SSH.
+12. From the configuring machine, download or clone this repo
+13. SSH into the Pi
+14. ssh-copy-id to the pi (to make it oh so much easier to administer)
+15. copy hosts-localhost to a new file "hosts", and edit it, replacing "localhost" with the name or IP of your Pi.
+16. `ansible-playbook playbook.yml -i hosts -u pi`
+17. `reboot` the pi
+18. Log in to your Google account on the Pi
+19. Put a bow on it. You're done!
