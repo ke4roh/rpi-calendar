@@ -1,0 +1,5 @@
+hosts
+calendar-install-*.run
+package
+makeself-2.4.2*
+playbook.retry
