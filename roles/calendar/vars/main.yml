@@ -1,0 +1,4 @@
+---
+# Screensaver timeout in minutes - 0 means no timeout
+# Configure a PIR sensor to show the display when necessary
+DPMS_TIMEOUT: 0

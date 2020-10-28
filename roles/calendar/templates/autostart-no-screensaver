@@ -1,0 +1,6 @@
+@lxpanel --profile LXDE-pi
+@pcmanfm --desktop --profile LXDE-pi
+point-rpi
+@xset s noblank
+@xset s off
+@xset s {% if rpi_model.startswith("Raspberry Pi 4") %}dpms 0 0 0{% else %}-dpms{% endif %}
