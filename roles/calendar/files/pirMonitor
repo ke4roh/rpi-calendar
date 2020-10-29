@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+# Started from https://www.freva.com/2019/05/21/hc-sr501-pir-motion-sensor-on-raspberry-pi/
+
+import RPi.GPIO as GPIO
+import time
+import subprocess
+import os
+
+os.environ['DISPLAY'] = ":0.0"
+max_idle=30
+
+try:
+   GPIO.setmode(GPIO.BCM)
+   GPIO.setwarnings(False)
+   PIR_PIN = 23
+   GPIO.setup(PIR_PIN, GPIO.IN)
+
+   time.sleep(1)
+
+   next_check=0
+   while True:
+     if time.time() >= next_check and GPIO.input(PIR_PIN):
+       subprocess.call('xset dpms force on', shell=True)
+       next_check=time.time() + max_idle
+     time.sleep(1)
+finally:
+   GPIO.cleanup()

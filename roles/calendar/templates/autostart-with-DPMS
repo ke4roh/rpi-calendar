@@ -1,0 +1,6 @@
+@lxpanel --profile LXDE-pi
+@pcmanfm --desktop --profile LXDE-pi
+point-rpi
+@xset s blank
+@xset s dpms
+@xset s {{ ( DPMS_TIMEOUT_MIN | int ) * 60 }} {{ ( DPMS_TIMEOUT_MIN | int ) * 60 }}

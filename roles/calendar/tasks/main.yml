@@ -1,3 +1,12 @@
+- name: Fetch Raspberry pi model
+  slurp:
+    src: "/sys/firmware/devicetree/base/model"
+  register: rpi_model_data
+
+- name: Set Raspberry Pi model
+  ansible.builtin.set_fact:
+     rpi_model: "{{ rpi_model_data['content'] | b64decode }}"
+
 - name: Install Chromium
   package: 
       name: chromium-browser
@@ -8,12 +17,12 @@
       name: scrot
       state: latest
  
-- name: Install feh
+- name: Install feh to display an image
   package:
       name: feh
       state: latest
 
-- name: Install wmctrl
+- name: Install wmctrl to control windows
   package:
       name: wmctrl
       state: latest
@@ -28,7 +37,7 @@
      executable: /usr/bin/pip3
      name: python-uinput
 
-- name: Load the uinput module so we can fake keystrokes
+- name: Load the uinput module to fake keystrokes
   lineinfile:
      dest: /etc/modules
      create: true
@@ -48,7 +57,7 @@
      mode: '0755'
      owner: pi
 
-- name: Install refresh_cal script
+- name: Install refresh_cal script to scroll to the right spot on the calendar periodically
   copy:
      src: refresh_cal
      dest: /home/pi/refresh_cal
@@ -75,7 +84,7 @@
     job: "/home/pi/refresh_cal"
   when: false
 
-- name: Autostart folder 
+- name: Autostart folder for LXDE
   file:
     path: "/home/pi/.config/autostart"
     state: directory
@@ -89,19 +98,35 @@
      mode: '0644'
      owner: pi
 
-- name: Remove default screensaver config
+- name: Remove default graphical screensaver config
   lineinfile:
      dest: /etc/xdg/lxsession/LXDE-pi/autostart
      state: absent
      line: "@xscreensaver -no-splash"
 
 - name: Turn off screensaver in LXDE autostart
-  blockinfile:
+  template:
+     src: autostart-no-screensaver
      dest: /etc/xdg/lxsession/LXDE-pi/autostart
-     create: true
+     mode: '0644'
      owner: pi
-     block: |
-        @xset s noblank
-        @xset s off
-        @xset s -dpms
-# for Pi 4, the last line should be "@xset dpms 0 0 0", but I haven't figured out how to detect the Pi 4 yet.
+     group: root
+  when: ( DPMS_TIMEOUT_MIN | int ) <= 0
+
+- name: Copy the script to monitor PIR sensor
+  copy:
+     src: pirMonitor
+     dest: /home/pi/pirMonitor
+     mode: '755'
+     owner: pi
+     group: pi
+  when: ( DPMS_TIMEOUT_MIN | int ) > 0
+
+- name: Turn on screensaver in LXDE autostart
+  template:
+     src: autostart-with-DPMS
+     dest: /etc/xdg/lxsession/LXDE-pi/autostart
+     mode: '0644'
+     owner: pi
+     group: root
+  when: ( DPMS_TIMEOUT_MIN | int ) > 0
