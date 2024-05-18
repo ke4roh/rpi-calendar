@@ -24,9 +24,9 @@
       state: latest
 
 - name: Install python-uinput to fake keystrokes in the browser
-  pip: 
-     executable: /usr/bin/pip3
-     name: python-uinput
+  package:
+     name: python3-uinput
+     state: latest
 
 - name: Load the uinput module so we can fake keystrokes
   lineinfile:
