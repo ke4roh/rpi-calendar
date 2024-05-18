@@ -7,7 +7,7 @@ further!  The solution is here.
 ![Photo of the finished product mounted on a wall near clipboards, dry-erase, and files.](photos/Overview.jpg)
 
 ## Ingredients
-1. Raspberry Pi 3 B
+1. Raspberry Pi (I used model 3 B)
 2. 2.5 A USB power supply
 3. Short HDMI cable - see [photo of the back](photos/Back.jpg)
 4. 32" LCD TV with HDMI input (I got one on Craigslist for $5)
@@ -20,7 +20,7 @@ further!  The solution is here.
 11. Small cable ties (a.k.a. zip ties) 
 12. Duct tape
 
-## Steps
+## Getting the Raspberry Pi ready to turn on 
 1. Get the [Raspberry Pi imager](https://www.raspberrypi.org/downloads/) for a computer near you with an SD card slot.
 2. Download the [Raspbian Stretch image](https://downloads.raspberrypi.org/raspbian_full/images/raspbian_full-2019-04-09/). 
 Buster has an unfortunate networking bug that causes it to drop wi-fi connection after a few minutes in my installation.
@@ -34,16 +34,22 @@ part of this arrangement is the micro USB power connector.  Be sure the pins on 
 5. Power it up, plug in the keyboard and mouse to the usb hub.
 6. Do the basic setup for your Pi - select language, keyboard style, time zone, password, etc., and set up the network.  You'll
 use the default user "pi" to run the calendar, and this user has sudo permission by default, which will be needed.
-7. If you want to set the system up remotely (from another machine running Ansible), skip to step 11
-8. `wget https://github.com/ke4roh/rpi-calendar/releases/download/r1/calendar-install-1.run`
-9. `sh calendar-install-1.run`
-10. skip to step 17
+
+Now select whether you want to set up from the Pi or manage from elsewhere.
+
+## Setting up just from the Pi
+8. `wget https://github.com/ke4roh/rpi-calendar/releases/download/r1/calendar-install-2.run`
+9. `sh calendar-install-2.run`
+
+## Setting up from a remote system
 11. In Pi system preferences, enable SSH.
 12. From the configuring machine, download or clone this repo
 13. SSH into the Pi
 14. ssh-copy-id to the pi (to make it oh so much easier to administer)
 15. copy hosts-localhost to a new file "hosts", and edit it, replacing "localhost" with the name or IP of your Pi.
 16. `ansible-playbook playbook.yml -i hosts -u pi`
-17. `reboot` the pi
-18. Log in to your Google account on the Pi
-19. Put a bow on it. You're done!
+
+## Finishing up
+18. `reboot` the pi
+19. Log in to your Google account on the Pi
+20. Put a bow on it. You're done!
