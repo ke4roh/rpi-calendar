@@ -1,0 +1,49 @@
+name: Build and Publish Release
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.release.target_commitish }}
+
+      - name: Set up Git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Determine version from tag
+        id: vars
+        run: |
+          tag="${{ github.event.release.tag_name }}"
+          version=${tag#v}
+          version=${version#r}
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Update version files
+        run: |
+          echo "${{ steps.vars.outputs.version }}" > release_number.txt
+          sed -i "s/calendar-install-[0-9]\+.run/calendar-install-${{ steps.vars.outputs.version }}.run/" README.md
+          git add release_number.txt README.md
+          git commit -m "Release version ${{ steps.vars.outputs.version }}"
+
+      - name: Push changes
+        run: git push origin HEAD:${{ github.event.release.target_commitish }}
+
+      - name: Build installer
+        run: make package
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: calendar-install-${{ steps.vars.outputs.version }}.run
