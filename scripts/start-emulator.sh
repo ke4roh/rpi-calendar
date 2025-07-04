@@ -34,5 +34,6 @@ exec qemu-system-aarch64 \
   -dtb "$DTB" \
   -append "root=/dev/mmcblk0p2 rw console=ttyAMA0" \
   -serial stdio \
-  -nic user,hostfwd=tcp::2222-:22,model=usb-net
+  -netdev user,id=net0,hostfwd=tcp::2222-:22 \
+  -device usb-net,netdev=net0
 
