@@ -53,3 +53,5 @@ Now select whether you want to set up from the Pi or manage from elsewhere.
 18. `reboot` the pi
 19. Log in to your Google account on the Pi
 20. Put a bow on it. You're done!
+21. The calendar autostarts via `~/.config/lxsession/LXDE-pi/calendar.desktop`.
+    Move that file to `/etc/xdg/autostart` for a system-wide setup.

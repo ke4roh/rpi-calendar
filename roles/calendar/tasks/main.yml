@@ -75,17 +75,17 @@
     job: "/home/pi/refresh_cal"
   when: false
 
-- name: Autostart folder 
+- name: LXDE autostart folder
   file:
-    path: "/home/pi/.config/autostart"
+    path: "/home/pi/.config/lxsession/LXDE-pi"
     state: directory
     owner: pi
-    mode: '0755' 
+    mode: '0755'
 
 - name: Autostart the calendar on boot
   copy:
      src: calendar.desktop
-     dest: /home/pi/.config/autostart/calendar.desktop
+     dest: /home/pi/.config/lxsession/LXDE-pi/calendar.desktop
      mode: '0644'
      owner: pi
 
