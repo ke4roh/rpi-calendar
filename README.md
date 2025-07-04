@@ -1,8 +1,11 @@
 # Calendar Pi
 Did you live your life near the turn of the century by a dry-erase 
 calendar in the kitchen?  Do you long for more visibility into your 
-Google Calendar (or perhaps other online calendar)?  Then look no 
+Google Calendar (or perhaps other online calendar)?  Then look no
 further!  The solution is here.
+
+This setup now uses **qutebrowser** in kiosk mode for a lighter footprint than
+Chromium.
 
 ![Photo of the finished product mounted on a wall near clipboards, dry-erase, and files.](photos/Overview.jpg)
 
@@ -52,3 +55,7 @@ Now select whether you want to set up from the Pi or manage from elsewhere.
 20. Put a bow on it. You're done!
 21. The calendar autostarts via `~/.config/lxsession/LXDE-pi/calendar.desktop`.
     Move that file to `/etc/xdg/autostart` for a system-wide setup.
+
+## Testing
+Run `make package` to build the installation archive. This step exercises the
+packaging scripts and ensures everything is wired correctly.
