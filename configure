@@ -5,7 +5,7 @@
 set -euo pipefail
 
 RUNTIME=${RUNTIME:-runtime}
-IMG_URL=${IMG_URL:-"https://downloads.raspberrypi.org/raspios_arm64/images/raspios_arm64-2024-03-12/2024-03-12-raspios-bookworm-arm64.img.xz"}
+IMG_URL=${IMG_URL:-"https://downloads.raspberrypi.com/raspios_armhf/images/raspios_armhf-2025-05-13/2025-05-13-raspios-bookworm-armhf.img.xz"}
 IMG_ZIP="$RUNTIME/raspios.img.xz"
 IMG="$RUNTIME/raspios.img"
 KERNEL="$RUNTIME/kernel8.img"

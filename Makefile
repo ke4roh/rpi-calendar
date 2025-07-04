@@ -16,14 +16,14 @@ calendar-install-$(CALENDAR_VER).run: makeself-$(MAKESELF_VER)/makeself.sh insta
 .PHONY: configure test clean package release
 
 configure:
-        if [ ! -f .env ]; then ./configure; else echo "Using existing .env"; fi
+	if [ ! -f .env ]; then ./configure; else echo "Using existing .env"; fi
 
 test: configure
-        ./scripts/test-emulator.sh
+	./scripts/test-emulator.sh
 
 clean:
-        if [ -f .env ] && grep -q "rpi-calendar env generated" .env; then rm .env; fi
-        rm -rf runtime rpi-calendar calendar-install-*.run
+	if [ -f .env ] && grep -q "rpi-calendar env generated" .env; then rm .env; fi
+	rm -rf runtime rpi-calendar calendar-install-*.run
 
 package: test calendar-install-$(CALENDAR_VER).run
 
