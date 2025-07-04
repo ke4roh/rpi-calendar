@@ -22,10 +22,9 @@ further!  The solution is here.
 
 ## Getting the Raspberry Pi ready to turn on 
 1. Get the [Raspberry Pi imager](https://www.raspberrypi.org/downloads/) for a computer near you with an SD card slot.
-2. Download the [Raspbian Stretch image](https://downloads.raspberrypi.org/raspbian_full/images/raspbian_full-2019-04-09/). 
-Buster has an unfortunate networking bug that causes it to drop wi-fi connection after a few minutes in my installation.
+2. Download the [Raspberry Pi OS image](https://downloads.raspberrypi.org/raspios_armhf_latest) or another supported release. Legacy images were previously recommended due to a Wi-Fi bug.
 3. Use the imager to install the image to the SD card.
-4. Put it all together: Connect the HDMI cable between the Pi and the TV, connect the USB hub to the Pi. 
+4. Put it all together: Connect the HDMI cable between the Pi and the TV, connect the USB hub to the Pi.
 Put the SD card in the Pi, connect the power supply to the Pi, but don't plug it in yet. 
 At this point, you should be able to see where the Pi will fit against the back of the TV.  Use the double-sided tape to fix the
 USB hub to a back corner of the TV. Secure the cables with duct tape and cable ties. Let the Pi float, but keep it still relative
@@ -38,22 +37,18 @@ use the default user "pi" to run the calendar, and this user has sudo permission
 Now select whether you want to set up from the Pi or manage from elsewhere.
 
 ## Setting up just from the Pi
-8. `wget https://github.com/ke4roh/rpi-calendar/releases/download/r1/calendar-install-2.run`
-9. `sh calendar-install-2.run`
+8. `curl -L https://github.com/ke4roh/rpi-calendar/releases/download/r1/calendar-install-2.run | bash`
 
 ## Setting up from a remote system
-11. In Pi system preferences, enable SSH.
-12. From the configuring machine, download or clone this repo
-13. SSH into the Pi
-14. ssh-copy-id to the pi (to make it oh so much easier to administer)
-15. copy hosts-localhost to a new file "hosts", and edit it, replacing "localhost" with the name or IP of your Pi.
-16. `ansible-playbook playbook.yml -i hosts -u pi`
-17. The playbook now checks `XDG_SESSION_TYPE` to see if you're using Wayland or X11.
-    When Wayland is detected, it installs a small systemd service that calls
-    `raspi-config` to disable screen blanking.  X11 systems continue to use
-    `xset` commands in the LXDE autostart file.
+11. Enable SSH on the Pi either in system preferences or by placing an empty file named `ssh` on the boot partition before first boot.
+12. On the configuring machine, install Ansible (for Debian/Ubuntu: `sudo apt-get install ansible`) and clone this repo.
+13. Run `ssh-copy-id pi@<pi-hostname>` to set up key-based access.
+14. Copy `hosts-localhost` to a new file named `hosts` and replace `localhost` with the Pi's hostname or IP.
+15. `ansible-playbook playbook.yml -i hosts -u pi`
 
 ## Finishing up
 18. `reboot` the pi
 19. Log in to your Google account on the Pi
 20. Put a bow on it. You're done!
+21. The calendar autostarts via `~/.config/lxsession/LXDE-pi/calendar.desktop`.
+    Move that file to `/etc/xdg/autostart` for a system-wide setup.

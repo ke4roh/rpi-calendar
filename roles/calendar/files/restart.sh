@@ -16,9 +16,11 @@ if [ ! -z "$OLD_CAL_WINDOW" ] ; then
    wmctrl -ic "$OLD_CAL_WINDOW"
 fi
 sleep 1
-killall chromium-browser-v7
+# Try to stop any running Chromium browser, regardless of the exact binary name
+pkill -f chromium-browser || :
 sleep 2
-killall -9 chromium-browser-v7 2>&1 >/dev/null || :
+# Force kill any lingering Chromium processes
+pkill -9 -f chromium-browser 2>&1 >/dev/null || :
 
 # Restart the calendar window
 ./startup.sh
