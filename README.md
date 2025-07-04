@@ -48,6 +48,10 @@ Now select whether you want to set up from the Pi or manage from elsewhere.
 14. ssh-copy-id to the pi (to make it oh so much easier to administer)
 15. copy hosts-localhost to a new file "hosts", and edit it, replacing "localhost" with the name or IP of your Pi.
 16. `ansible-playbook playbook.yml -i hosts -u pi`
+17. The playbook now checks `XDG_SESSION_TYPE` to see if you're using Wayland or X11.
+    When Wayland is detected, it installs a small systemd service that calls
+    `raspi-config` to disable screen blanking.  X11 systems continue to use
+    `xset` commands in the LXDE autostart file.
 
 ## Finishing up
 18. `reboot` the pi

@@ -1,0 +1,10 @@
+[Unit]
+Description=Disable screen blanking on Wayland
+After=graphical.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/raspi-config nonint do_blanking 1
+
+[Install]
+WantedBy=graphical.target
