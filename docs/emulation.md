@@ -11,7 +11,8 @@ setup for local experimentation.
 
 ## Quick start
 1. Run `./configure` to install dependencies and prepare runtime files.
-   This downloads a Pi OS image and extracts the kernel and DTB into
+   The script installs QEMU, Ansible, and helper utilities, downloads a Pi OS image,
+   resizes it to 8 GiB for QEMU, and extracts the kernel and DTB into
    `./runtime`.
 2. Boot the VM using the provided helper script:
 

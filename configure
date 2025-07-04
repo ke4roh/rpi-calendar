@@ -19,10 +19,12 @@ install_packages() {
   case "$os_id" in
     debian|ubuntu)
       sudo apt-get update
-      sudo apt-get install -y qemu-system-aarch64 qemu-efi-aarch64 qemu-utils curl unzip
+      sudo apt-get install -y \
+        qemu-system-aarch64 qemu-efi-aarch64 qemu-utils \
+        curl unzip ansible apt-utils
       ;;
     fedora)
-      sudo dnf install -y @virtualization qemu-system-aarch64 curl unzip
+      sudo dnf install -y @virtualization qemu-system-aarch64 curl unzip ansible
       ;;
     *)
       echo "Unsupported OS $os_id" >&2
@@ -40,6 +42,12 @@ if [ ! -f "$IMG" ]; then
   echo "Downloading Raspberry Pi OS image..."
   curl -L "$IMG_URL" -o "$IMG_ZIP"
   unxz -k "$IMG_ZIP"
+  echo "Resizing image to 8G to satisfy QEMU..."
+  if command -v qemu-img >/dev/null; then
+    qemu-img resize "$IMG" 8G
+  else
+    echo "qemu-img not found; skipping resize" >&2
+  fi
 fi
 
 if [ ! -f "$KERNEL" ] || [ ! -f "$DTB" ]; then
