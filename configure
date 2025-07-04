@@ -57,9 +57,9 @@ if [ ! -f "$KERNEL" ] || [ ! -f "$DTB" ]; then
     echo "parted not found" >&2
     exit 1
   fi
-  offset=$(sudo parted -s "$IMG" unit B print | awk -F: '$1==1 {gsub(/B/,"",$2); print $2}')
+  offset=$(sudo parted -ms "$IMG" unit B print | awk -F: '$1==1 {gsub(/B/,"",$2); print $2}')
   tmpdir=$(mktemp -d)
-  sudo mount -o loop,offset=$offset "$IMG" "$tmpdir"
+  sudo mount -t vfat -o loop,offset=$offset,ro "$IMG" "$tmpdir"
   sudo cp "$tmpdir/kernel8.img" "$KERNEL"
   sudo cp "$tmpdir/bcm2710-rpi-3-b-plus.dtb" "$DTB"
   sudo umount "$tmpdir"
