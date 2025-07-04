@@ -13,7 +13,8 @@ setup for local experimentation.
 1. Run `./configure` to install dependencies and prepare runtime files.
    The script installs QEMU, Ansible, and helper utilities, downloads a Pi OS image,
    resizes it to 8 GiB for QEMU, and extracts the kernel and DTB into
-   `./runtime`.
+   `./runtime`. It also writes a `.env` file describing the runtime paths
+   which the helper scripts automatically load.
 2. Boot the VM using the provided helper script:
 
    ```bash
@@ -49,6 +50,12 @@ real hardware.
 The `scripts/start-emulator.sh` script used above encapsulates the QEMU
 options and forwards SSH to port 2222. Invoke it whenever you need to
 launch the VM for testing.
+
+### Makefile shortcuts
+`make configure` runs the setup script only if `.env` does not already
+exist. `make test` boots the emulator and applies the playbook using the
+helper script, while `make clean` removes the generated runtime files
+and environment.
 
 ## Automated testing
 An additional helper script can run the playbook against the emulator and verify that key packages are installed. It boots the VM, waits for SSH on port 2222, applies the playbook and then checks that Chromium launches correctly.

@@ -10,6 +10,7 @@ IMG_ZIP="$RUNTIME/raspios.img.xz"
 IMG="$RUNTIME/raspios.img"
 KERNEL="$RUNTIME/kernel8.img"
 DTB="$RUNTIME/bcm2710-rpi-3-b-plus.dtb"
+ENV_FILE=".env"
 
 mkdir -p "$RUNTIME"
 
@@ -58,7 +59,15 @@ if [ ! -f "$KERNEL" ] || [ ! -f "$DTB" ]; then
   sudo cp "$tmpdir/kernel8.img" "$KERNEL"
   sudo cp "$tmpdir/bcm2710-rpi-3-b-plus.dtb" "$DTB"
   sudo umount "$tmpdir"
-  rmdir "$tmpdir"
+rmdir "$tmpdir"
 fi
 
-echo "Runtime prepared in $RUNTIME" && ls -1 "$RUNTIME"
+cat >"$ENV_FILE" <<EOF
+# rpi-calendar env generated
+RUNTIME=$RUNTIME
+IMG=$IMG
+KERNEL=$KERNEL
+DTB=$DTB
+EOF
+
+echo "Runtime prepared in $RUNTIME" && ls -1 "$RUNTIME" && echo "Environment written to $ENV_FILE"

@@ -4,3 +4,4 @@ makeself-2.4.2*
 playbook.retry
 rpi-calendar
 runtime/
+.env

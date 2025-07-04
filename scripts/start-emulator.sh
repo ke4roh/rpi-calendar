@@ -4,7 +4,11 @@
 
 set -euo pipefail
 
-IMG="${1:-runtime/raspios.img}"
+if [ -f .env ]; then
+  . ./.env
+fi
+
+IMG="${1:-${IMG:-runtime/raspios.img}}"
 if [ ! -f "$IMG" ]; then
   echo "Image $IMG not found" >&2
   exit 1
