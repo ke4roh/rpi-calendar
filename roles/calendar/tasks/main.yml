@@ -18,6 +18,10 @@
       name: wmctrl
       state: latest
 
+- name: Detect desktop session type
+  set_fact:
+     session_type: "{{ ansible_env.XDG_SESSION_TYPE | default('x11') }}"
+
 - name: Install unclutter to get the mouse pointer to disappear
   package:
       name: unclutter
@@ -94,6 +98,24 @@
      dest: /etc/xdg/lxsession/LXDE-pi/autostart
      state: absent
      line: "@xscreensaver -no-splash"
+  when: session_type != 'wayland'
+
+- name: Install service to disable Wayland screen blanking
+  copy:
+     src: disable-blanking.service
+     dest: /etc/systemd/system/disable-blanking.service
+     owner: root
+     group: root
+     mode: '0644'
+  when: session_type == 'wayland'
+
+- name: Enable Wayland blanking disable service
+  systemd:
+     name: disable-blanking.service
+     enabled: yes
+     state: started
+     daemon_reload: yes
+  when: session_type == 'wayland'
 
 - name: Turn off screensaver in LXDE autostart
   blockinfile:
@@ -104,4 +126,5 @@
         @xset s noblank
         @xset s off
         @xset s -dpms
-# for Pi 4, the last line should be "@xset dpms 0 0 0", but I haven't figured out how to detect the Pi 4 yet.
+  # for Pi 4, the last line should be "@xset dpms 0 0 0", but I haven't figured out how to detect the Pi 4 yet.
+  when: session_type != 'wayland'
