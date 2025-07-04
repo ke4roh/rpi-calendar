@@ -1,12 +1,12 @@
 #!/bin/bash
 # Boot a Pi image in QEMU and run a basic smoke test via Ansible.
-# Usage: ./test-emulator.sh /path/to/raspios.img
+# Usage: ./scripts/test-emulator.sh [image]
 
 set -euo pipefail
 
-IMG="$1"
-if [ -z "$IMG" ]; then
-  echo "Usage: $0 /path/to/raspios.img" >&2
+IMG="${1:-runtime/raspios.img}"
+if [ ! -f "$IMG" ]; then
+  echo "Image $IMG not found" >&2
   exit 1
 fi
 
@@ -36,3 +36,4 @@ EOF
 ansible-playbook -i "$HOSTS_FILE" playbook.yml
 # Simple check: ensure Chromium is installed
 ansible -i "$HOSTS_FILE" all -m shell -a 'which chromium-browser'
+
