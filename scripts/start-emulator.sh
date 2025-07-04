@@ -29,10 +29,10 @@ fi
 exec qemu-system-aarch64 \
   -M raspi3b \
   -m 1G \
-  -drive file="$IMG",format=raw \
+  -drive if=sd,file="$IMG",format=raw \
   -kernel "$KERNEL" \
   -dtb "$DTB" \
-  -append "root=/dev/sda2 rw console=ttyAMA0" \
+  -append "root=/dev/mmcblk0p2 rw console=ttyAMA0" \
   -serial stdio \
-  -net user,hostfwd=tcp::2222-:22 -net nic
+  -nic user,hostfwd=tcp::2222-:22,model=usb-net
 

@@ -14,10 +14,11 @@ if [ ! -f "$IMG" ]; then
   exit 1
 fi
 
-# Launch emulator in background
-./scripts/start-emulator.sh "$IMG" &
+# Launch emulator in background, logging output so Ansible has blocking IO
+LOG_FILE=$(mktemp)
+./scripts/start-emulator.sh "$IMG" >"$LOG_FILE" 2>&1 &
 QEMU_PID=$!
-trap 'kill $QEMU_PID 2>/dev/null; rm -f "$HOSTS_FILE"' EXIT
+trap 'kill $QEMU_PID 2>/dev/null; rm -f "$HOSTS_FILE" "$LOG_FILE"' EXIT
 
 # Wait for SSH to come up
 for i in {1..60}; do
