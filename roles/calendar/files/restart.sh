@@ -16,11 +16,11 @@ if [ ! -z "$OLD_CAL_WINDOW" ] ; then
    wmctrl -ic "$OLD_CAL_WINDOW"
 fi
 sleep 1
-# Try to stop any running Chromium browser, regardless of the exact binary name
-pkill -f chromium-browser || :
+# Try to stop any running qutebrowser instance
+pkill -f qutebrowser || :
 sleep 2
-# Force kill any lingering Chromium processes
-pkill -9 -f chromium-browser 2>&1 >/dev/null || :
+# Force kill any lingering qutebrowser processes
+pkill -9 -f qutebrowser 2>&1 >/dev/null || :
 
 # Restart the calendar window
 ./startup.sh

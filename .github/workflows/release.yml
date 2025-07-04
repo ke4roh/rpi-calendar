@@ -17,6 +17,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.release.target_commitish }}
 
+
       - name: Set up Git user
         run: |
           git config user.name "github-actions[bot]"
