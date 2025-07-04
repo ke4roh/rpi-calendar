@@ -60,3 +60,12 @@ simplifies booting the VM:
 
 The script launches QEMU with sensible defaults and exposes SSH on
 port 2222.
+
+## Automated testing
+An additional helper script can run the playbook against the emulator and verify that key packages are installed. It boots the VM, waits for SSH on port 2222, applies the playbook and then checks that Chromium launches correctly.
+
+```bash
+./scripts/test-emulator.sh /path/to/raspios.img
+```
+
+This provides a basic smoke test without requiring real Pi hardware.
