@@ -21,9 +21,11 @@ setup for local experimentation.
    ./scripts/start-emulator.sh
    ```
 
-   The script launches an emulated Pi 3B with 1 GiB of RAM using the
-   kernel and DTB extracted to `runtime/` and forwards SSH to port `2222`
-   on the host.
+  The script launches an emulated Pi 3B with 1 GiB of RAM using the
+  kernel and DTB extracted to `runtime/` and forwards SSH to port `2222`
+  on the host.
+  You may see occasional `Slirp: Failed to send packet` warnings from QEMU;
+  these are harmless and can be ignored.
 
 3. Log in to the virtual Pi using `ssh -p 2222 pi@localhost` once the
    boot process finishes.

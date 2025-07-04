@@ -22,10 +22,10 @@ install_packages() {
       sudo apt-get update
       sudo apt-get install -y \
         qemu-system-aarch64 qemu-efi-aarch64 qemu-utils \
-        curl unzip ansible apt-utils
+        curl unzip ansible apt-utils parted
       ;;
     fedora)
-      sudo dnf install -y @virtualization qemu-system-aarch64 curl unzip ansible
+      sudo dnf install -y @virtualization qemu-system-aarch64 curl unzip ansible parted
       ;;
     *)
       echo "Unsupported OS $os_id" >&2
@@ -53,13 +53,17 @@ fi
 
 if [ ! -f "$KERNEL" ] || [ ! -f "$DTB" ]; then
   echo "Extracting kernel and DTB from image..."
-  offset=$(parted -m "$IMG" unit B print | awk -F: '$1==1 {gsub(/B/,"",$2); print $2}')
+  if ! command -v parted >/dev/null; then
+    echo "parted not found" >&2
+    exit 1
+  fi
+  offset=$(sudo parted -s "$IMG" unit B print | awk -F: '$1==1 {gsub(/B/,"",$2); print $2}')
   tmpdir=$(mktemp -d)
   sudo mount -o loop,offset=$offset "$IMG" "$tmpdir"
   sudo cp "$tmpdir/kernel8.img" "$KERNEL"
   sudo cp "$tmpdir/bcm2710-rpi-3-b-plus.dtb" "$DTB"
   sudo umount "$tmpdir"
-rmdir "$tmpdir"
+  rmdir "$tmpdir"
 fi
 
 cat >"$ENV_FILE" <<EOF
