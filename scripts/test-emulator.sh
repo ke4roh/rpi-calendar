@@ -13,6 +13,7 @@ fi
 # Launch emulator in background
 ./scripts/start-emulator.sh "$IMG" &
 QEMU_PID=$!
+trap 'kill $QEMU_PID 2>/dev/null; rm -f "$HOSTS_FILE"' EXIT
 
 # Wait for SSH to come up
 for i in {1..60}; do
@@ -21,13 +22,17 @@ for i in {1..60}; do
   fi
   sleep 5
 done
+if ! nc -z localhost 2222; then
+  echo "SSH did not become available" >&2
+  exit 1
+fi
 
 HOSTS_FILE=$(mktemp)
-sed 's/ansible_port=.*/ansible_port=2222/' hosts-localhost > "$HOSTS_FILE"
+cat >"$HOSTS_FILE" <<EOF
+[calendar]
+localhost ansible_host=127.0.0.1 ansible_user=pi ansible_port=2222
+EOF
 
 ansible-playbook -i "$HOSTS_FILE" playbook.yml
 # Simple check: ensure Chromium is installed
 ansible -i "$HOSTS_FILE" all -m shell -a 'which chromium-browser'
-
-kill $QEMU_PID
-rm "$HOSTS_FILE"

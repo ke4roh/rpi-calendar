@@ -24,10 +24,12 @@ setup for local experimentation.
      -append "root=/dev/sda2 rw console=ttyAMA0" \
      -serial stdio \
      -net user,hostfwd=tcp::2222-:22 -net nic
-   ```
+  ```
 
-   This starts an emulated Pi 3B with 1 GiB of RAM. SSH is forwarded to
-   port `2222` on the host for convenience.
+   Kernel and DTB files are expected in the current directory; they can
+   be extracted from the image's boot partition. This starts an
+   emulated Pi 3B with 1 GiB of RAM. SSH is forwarded to port `2222` on
+   the host for convenience.
 
 3. Log in to the virtual Pi using `ssh -p 2222 pi@localhost` once the
    boot process finishes.
