@@ -1,6 +1,6 @@
-- name: Install qutebrowser
+- name: Install Chromium
   package:
-      name: qutebrowser
+      name: chromium-browser
       state: latest
 
 - name: Install scrot

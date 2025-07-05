@@ -4,8 +4,8 @@ calendar in the kitchen?  Do you long for more visibility into your
 Google Calendar (or perhaps other online calendar)?  Then look no
 further!  The solution is here.
 
-This setup now uses **qutebrowser** in kiosk mode for a lighter footprint than
-Chromium.
+This setup runs **Chromium** in kiosk mode. A modern user agent string keeps
+Google Calendar happy while providing full ECMAScript and CSS support.
 
 ![Photo of the finished product mounted on a wall near clipboards, dry-erase, and files.](photos/Overview.jpg)
 
