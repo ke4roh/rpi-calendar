@@ -49,14 +49,14 @@ use the default user "pi" to run the calendar, and this user has sudo permission
 19. Put a bow on it. You're done!
 
 ## Adding a passive infra-red sensor
-1. Get an HC-SR501 sensor module.  Set it's L/H option to "H", either with a jumper or a dot of solder.
-2. Connect wires to pins 4,6, and 16 on the top row of connectors. With the connector at the top left of the board, 
+1. Get an HC-SR501 sensor module.  Set its L/H option to "H", either with a jumper or a dot of solder.
+2. Connect wires to pins 4, 6, and 16 on the top row of connectors. With the connector at the top left of the board,
 the top leftmost pin is #2, and the top row is numbered by twos (the bottom row gets the ones). Pin 16 is GPIO 23.  
 If you change the scripts, you can change the pin.  
 3. With the HC-SR501 pins at the top and facing you, the leftmost pin is ground.  Connect that to the wire from pin 6 on the Pi.
 4. Connect the rightmost pin on the HC-SR501 to pin 4 from the Pi.
 5. Connect the center pin on the HC-SR501 to pin 16 from the Pi.
-6. Monut the HC-SR501 to your monitor, but away from the power LED or anything else that might mess with detection.
+6. Mount the HC-SR501 to your monitor, but away from the power LED or anything else that might mess with detection.
 7. When you run the playbook (either by `ansible-playbook` or `calendar-install.run`), add a parameter 'DPMS_TIMEOUT_MIN=20'.
 (Set it to your favorite value.  I like 20 minutes.)  For `ansible-playbook` execution, you'll want to prefix that with `--extra-vars `
 8. Watch it go 
