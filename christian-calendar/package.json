@@ -1,0 +1,54 @@
+{
+  "name": "Christian Calendar",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "quickTest": "jest --bail --onlyFailures",
+    "coverage": "jest --coverage",
+    "start": "react-scripts start",
+    "build": "react-scripts build --entry ./src/index.tsx",
+    "build:lib": "tsc -p tsconfig.build.json",
+    "eject": "react-scripts eject"
+  },
+  "homepage": "./",
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^18.19.115",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
+    "jest": "^29.7.0",
+    "react-scripts": "^5.0.1",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "moment-timezone": "^0.5.48",
+    "normalize.css": "^8.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.1",
+    "react-tooltip": "^5.29.1"
+  }
+}
