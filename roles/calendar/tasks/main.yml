@@ -23,7 +23,7 @@
      session_type: "{{ 'wayland' if use_wayland else 'x11' }}"
 
 - name: Configure Wayland preference
-  command: "raspi-config nonint do_wayland {{ 0 if use_wayland else 1 }}"
+  command: "raspi-config nonint do_wayland {{ 'W3' if use_wayland else 'W1' }}"
   register: wayland_config_result
   changed_when: wayland_config_result.rc == 0
   failed_when: wayland_config_result.rc not in [0,1]

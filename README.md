@@ -48,7 +48,9 @@ Now select whether you want to set up from the Pi or manage from elsewhere.
 13. Run `ssh-copy-id pi@<pi-hostname>` to set up key-based access.
 14. Copy `hosts-localhost` to a new file named `hosts` and replace `localhost` with the Pi's hostname or IP.
 15. If you want to try the new Wayland-based desktop, set `use_wayland: true` in
-    your inventory or pass it via `--extra-vars`.
+    your inventory or pass it via `--extra-vars`. The playbook then runs
+    `raspi-config nonint do_wayland W3` (for labwc). Leaving `use_wayland: false`
+    uses X11 via `raspi-config nonint do_wayland W1`.
 16. `ansible-playbook playbook.yml -i hosts -u pi`
 
 ## Finishing up
