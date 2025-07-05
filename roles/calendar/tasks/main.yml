@@ -18,9 +18,15 @@
       name: wmctrl
       state: latest
 
-- name: Detect desktop session type
+- name: Determine desired session type
   set_fact:
-     session_type: "{{ ansible_env.XDG_SESSION_TYPE | default('x11') }}"
+     session_type: "{{ 'wayland' if use_wayland else 'x11' }}"
+
+- name: Configure Wayland preference
+  command: "raspi-config nonint do_wayland {{ 0 if use_wayland else 1 }}"
+  register: wayland_config_result
+  changed_when: wayland_config_result.rc == 0
+  failed_when: wayland_config_result.rc not in [0,1]
 
 - name: Install unclutter to get the mouse pointer to disappear
   package:

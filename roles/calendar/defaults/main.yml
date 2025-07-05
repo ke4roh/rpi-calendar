@@ -1,0 +1,2 @@
+# Default to using X11
+use_wayland: false
