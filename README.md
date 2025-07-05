@@ -40,7 +40,7 @@ use the default user "pi" to run the calendar, and this user has sudo permission
 Now select whether you want to set up from the Pi or manage from elsewhere.
 
 ## Setting up just from the Pi
-8. `curl -L https://github.com/ke4roh/rpi-calendar/releases/download/r1/calendar-install-5.run | bash`
+8. `curl -L https://github.com/ke4roh/rpi-calendar/releases/download/v5/calendar-install-5.run | bash`
 
 ## Setting up from a remote system
 11. Enable SSH on the Pi either in system preferences or by placing an empty file named `ssh` on the boot partition before first boot.
