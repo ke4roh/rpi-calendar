@@ -34,7 +34,7 @@ jobs:
       - name: Update version files
         run: |
           echo "${{ steps.vars.outputs.version }}" > release_number.txt
-          sed -i "s/calendar-install-[0-9]\+.run/calendar-install-${{ steps.vars.outputs.version }}.run/" README.md
+          sed -i "s#releases/download/[a-zA-Z0-9._-]*/calendar-install-[0-9]\+.run#releases/download/${{ github.event.release.tag_name }}/calendar-install-${{ steps.vars.outputs.version }}.run#" README.md
           git add release_number.txt README.md
           git commit -m "Release version ${{ steps.vars.outputs.version }}"
 
