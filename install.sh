@@ -26,7 +26,7 @@ grep -q localhost $kh || ssh-keyscan localhost >>$kh
 # install Ansible if necessary
 sudo dpkg -s ansible 2>&1 >/dev/null || sudo apt-get install -y ansible
 
-if [ !# -gt 0 ] ; then
-    EXTRA_VARS="--extra_vars $*"
+if [ $# -gt 0 ]; then
+    EXTRA_VARS="--extra-vars $*"
 fi
 ansible-playbook playbook.yml -i hosts-localhost -u pi $EXTRA_VARS
