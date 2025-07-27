@@ -59,4 +59,5 @@ If you change the scripts, you can change the pin.
 6. Mount the HC-SR501 to your monitor, but away from the power LED or anything else that might mess with detection.
 7. When you run the playbook (either by `ansible-playbook` or `calendar-install.run`), add a parameter 'DPMS_TIMEOUT_MIN=20'.
 (Set it to your favorite value.  I like 20 minutes.)  For `ansible-playbook` execution, you'll want to prefix that with `--extra-vars `
-8. Watch it go 
+8. The playbook installs a `pir-monitor` systemd service that wakes the display when motion is detected. Set `CEC_FALLBACK=true` if your monitor needs HDMI‑CEC to wake up. The service starts automatically on boot and can be checked with `systemctl status pir-monitor`.
+9. Watch it go

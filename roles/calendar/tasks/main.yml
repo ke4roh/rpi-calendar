@@ -32,6 +32,12 @@
       name: unclutter
       state: latest
 
+- name: Install cec-utils for HDMI-CEC control
+  package:
+      name: cec-utils
+      state: latest
+  when: CEC_FALLBACK | bool
+
 - name: Install python-uinput to fake keystrokes in the browser
   pip: 
      executable: /usr/bin/pip3
@@ -116,10 +122,25 @@
 - name: Copy the script to monitor PIR sensor
   copy:
      src: pirMonitor
-     dest: /home/pi/pirMonitor
-     mode: '755'
-     owner: pi
-     group: pi
+     dest: /usr/local/bin/pirMonitor
+     mode: '0755'
+     owner: root
+     group: root
+  when: ( DPMS_TIMEOUT_MIN | int ) > 0
+
+- name: Install systemd service for PIR monitor
+  template:
+     src: pir-monitor.service.j2
+     dest: /etc/systemd/system/pir-monitor.service
+     mode: '0644'
+  when: ( DPMS_TIMEOUT_MIN | int ) > 0
+
+- name: Enable and start pir-monitor service
+  systemd:
+     name: pir-monitor.service
+     enabled: yes
+     state: started
+     daemon_reload: yes
   when: ( DPMS_TIMEOUT_MIN | int ) > 0
 
 - name: Turn on screensaver in LXDE autostart
