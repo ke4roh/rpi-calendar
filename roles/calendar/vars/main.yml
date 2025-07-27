@@ -2,3 +2,5 @@
 # Screensaver timeout in minutes - 0 means no timeout
 # Configure a PIR sensor to show the display when necessary
 DPMS_TIMEOUT_MIN: 0
+# Enable HDMI-CEC fallback if DPMS does not wake the display
+CEC_FALLBACK: false

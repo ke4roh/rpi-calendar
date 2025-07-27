@@ -1,28 +1,93 @@
 #!/usr/bin/env python3
 
-# Started from https://www.freva.com/2019/05/21/hc-sr501-pir-motion-sensor-on-raspberry-pi/
+"""Monitor a PIR sensor and wake the display when motion is detected."""
+
+import argparse
+import logging
+import os
+import shutil
+import subprocess
+import time
 
 import RPi.GPIO as GPIO
-import time
-import subprocess
-import os
 
-os.environ['DISPLAY'] = ":0.0"
-max_idle=30
 
-try:
-   GPIO.setmode(GPIO.BCM)
-   GPIO.setwarnings(False)
-   PIR_PIN = 23
-   GPIO.setup(PIR_PIN, GPIO.IN)
+def display_is_on() -> bool:
+    """Return True if the monitor appears to be on."""
+    try:
+        out = subprocess.check_output(["xset", "-q"], text=True, stderr=subprocess.DEVNULL)
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return True  # Assume on if we cannot determine
+    for line in out.splitlines():
+        if "Monitor is" in line:
+            return "On" in line
+    return True
 
-   time.sleep(1)
 
-   next_check=0
-   while True:
-     if time.time() >= next_check and GPIO.input(PIR_PIN):
-       subprocess.call('xset dpms force on', shell=True)
-       next_check=time.time() + max_idle
-     time.sleep(1)
-finally:
-   GPIO.cleanup()
+def wake_display(use_cec: bool) -> None:
+    """Wake the display using DPMS and optionally HDMI-CEC."""
+    if os.getenv("XDG_SESSION_TYPE") == "wayland":
+        cmd = ["loginctl", "unlock-sessions"]
+    else:
+        cmd = ["xset", "dpms", "force", "on"]
+    subprocess.run(cmd, check=False)
+    time.sleep(2)
+    if use_cec and not display_is_on():
+        logging.info("Falling back to HDMI-CEC")
+        if shutil.which("cec-client"):
+            try:
+                subprocess.run(
+                    ["cec-client", "-s", "-d", "1"],
+                    input="on 0\n",
+                    text=True,
+                    check=False,
+                )
+            except Exception as exc:  # pragma: no cover - best effort
+                logging.debug("CEC command failed: %s", exc)
+        else:
+            logging.debug("cec-client not installed")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="PIR motion monitor")
+    parser.add_argument("--pin", type=int, default=23, help="GPIO pin number")
+    parser.add_argument(
+        "--idle",
+        type=int,
+        default=30,
+        help="minimum seconds between wake commands",
+    )
+    parser.add_argument("--display", default=":0.0", help="display for xset")
+    parser.add_argument(
+        "--cec-fallback",
+        action="store_true",
+        default=os.getenv("CEC_FALLBACK", "0") in ("1", "true", "True"),
+        help="use HDMI-CEC if DPMS fails",
+    )
+    args = parser.parse_args()
+
+    os.environ["DISPLAY"] = args.display
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
+
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+    GPIO.setup(args.pin, GPIO.IN)
+
+    last_trigger = 0.0
+    logging.info("Monitoring GPIO pin %s", args.pin)
+    try:
+        while True:
+            GPIO.wait_for_edge(args.pin, GPIO.RISING)
+            now = time.time()
+            if now - last_trigger >= args.idle:
+                logging.info("Motion detected")
+                wake_display(args.cec_fallback)
+                last_trigger = now
+    except KeyboardInterrupt:
+        pass
+    finally:
+        GPIO.cleanup()
+
+
+if __name__ == "__main__":
+    main()

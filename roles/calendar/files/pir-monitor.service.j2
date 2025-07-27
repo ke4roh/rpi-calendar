@@ -1,0 +1,15 @@
+[Unit]
+Description=PIR sensor monitor to wake display on motion
+After=graphical.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+ExecStart=/usr/local/bin/pirMonitor
+Environment=DISPLAY=:0.0
+Environment=CEC_FALLBACK={{ '1' if CEC_FALLBACK | bool else '0' }}
+Restart=always
+
+[Install]
+WantedBy=graphical.target
